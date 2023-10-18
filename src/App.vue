@@ -1,17 +1,16 @@
 <template>
-  <navbar></navbar>
-  <div class="app">
-    <router-view></router-view>
+  <div>
+    <navbar></navbar>
+    <div class="app">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
-<script>
-import Navbar from '@/components/Navbar.vue';
-export default {
-  components: { Navbar },
-  data() {},
-  methods: {},
-};
+<script setup>
+import Navbar from "@/components/Navbar.vue";
+import { useStore } from "vuex";
+const store = useStore();
 </script>
 
 <style>

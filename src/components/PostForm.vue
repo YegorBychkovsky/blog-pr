@@ -1,5 +1,26 @@
+<script setup>
+import { defineEmits, ref } from "vue";
+const emit = defineEmits(["create"]);
+
+const post = ref({
+  title: "",
+  body: "",
+  id: 0,
+  // comments: [],
+});
+
+const createPost = () => {
+  post.value.id = Date.now();
+  emit("create", post.value);
+  post.value = {
+    title: "",
+    body: "",
+  };
+};
+</script>
+
 <template>
-  <form @submit.prevent>
+  <form @submit.prevent="createPost">
     <h4>Создание поста</h4>
     <my-input
       v-focus
@@ -8,34 +29,9 @@
       placeholder="Название"
     />
     <my-input v-model="post.body" type="text" placeholder="Описание" />
-    <my-button style="margin-top: 15px" @click="createPost"
-      >Создать</my-button
-    >
+    <my-button style="margin-top: 15px" type="submit">Создать</my-button>
   </form>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      post: {
-        title: '',
-        body: '',
-      },
-    };
-  },
-  methods: {
-    createPost() {
-      this.post.id = Date.now();
-      this.$emit('create', this.post);
-      this.post = {
-        title: '',
-        body: '',
-      };
-    },
-  },
-};
-</script>
 
 <style scoped>
 form {

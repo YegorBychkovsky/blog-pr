@@ -1,13 +1,12 @@
 <template>
   <div>
-    <p class="post-content">
-      {{ postContent }}
+    <p class="comment-content">
+      {{ commentContent }}
     </p>
     <h2>COMMENTS:</h2>
     <CommentsList />
   </div>
 </template>
-x
 
 <script setup>
 import { computed, onMounted } from "vue";
@@ -17,16 +16,15 @@ import CommentsList from "../components/CommentsList.vue";
 
 const store = useStore();
 const route = useRoute();
-const comments = computed(() => {
-  return store.state.comment.comments;
-});
-const postContent = computed(() => {
-  const postsString = localStorage.getItem("posts");
-  const posts = JSON.parse(postsString);
-  posts.find((post) => post._id === route.params.id).content;
+
+const commentContent = computed(() => {
+  const commentsString = localStorage.getItem("comments");
+  const comments = JSON.parse(commentsString);
+  comments.find((comment) => comment._id === route.params.id)?.content;
 });
 onMounted(() => {
-  store.dispatch("fetchComments", route.params.id);
+  console.log("fetch");
+  store.dispatch("fetchCommentsForComment", route.params.id);
 });
 </script>
 

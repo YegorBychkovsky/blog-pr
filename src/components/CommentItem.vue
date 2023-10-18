@@ -1,23 +1,18 @@
 <template>
   <div class="post">
-    <div class="content">
-      <div><strong>Title:</strong> {{ post.title }}</div>
-      <div class="content">
-        <strong>Content:</strong> {{ post.content }}
-      </div>
+    <div>
+      <div><strong>Author:</strong> {{ comment.author.fullName }}</div>
+      <div><strong>content:</strong> {{ comment.text }}</div>
     </div>
-    <div class="post__btns">
-      <my-button @click="openPost">Open</my-button>
-      <my-button style="height: 38px" @click="showDialogWindow"
-        >To Comment</my-button
-      >
+    <div class="comment__btns">
+      <my-button @click="openComment">Open</my-button>
+      <my-button @click="showDialogWindow">To Comment</my-button>
     </div>
     <MyDialog v-model:show="dialogVisible">
       <CommentForm @create="createComment" />
     </MyDialog>
   </div>
 </template>
-
 <script setup>
 import { defineProps, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -25,37 +20,36 @@ import { useStore } from "vuex";
 import CommentForm from "../components/CommentForm.vue";
 import MyDialog from "../components/ui/MyDialog.vue";
 
-const store = useStore();
 const route = useRouter();
-
-const dialogVisible = ref(false);
-
-const showDialogWindow = () => {
-  dialogVisible.value = true;
-};
+const store = useStore();
 
 const props = defineProps({
-  post: {
+  comment: {
     type: Object,
     required: true,
   },
 });
+const dialogVisible = ref(false);
 
-const openPost = () => {
-  route.push(`/posts/${props.post._id}`);
+const openComment = () => {
+  route.push(`/comment/${props.comment._id}`);
 };
 
+const showDialogWindow = () => {
+  dialogVisible.value = true;
+};
 const createComment = (text) => {
-  store.dispatch("createComment", {
-    postId: props.post._id,
+  store.dispatch("replyToComment", {
     text: text,
-    author: props.post.author,
+    parentCommentId: props.comment._id,
+    author: props.comment.author._id,
   });
+
   dialogVisible.value = false;
 };
 </script>
 
-<style scoped>
+<style>
 .post {
   display: flex;
   align-items: center;
@@ -63,11 +57,6 @@ const createComment = (text) => {
   padding: 15px;
   border: 2px solid teal;
   margin-top: 15px;
-}
-.content {
-  width: 70%;
-  overflow: hidden;
-  word-wrap: break-word;
 }
 .post__btns {
   display: flex;

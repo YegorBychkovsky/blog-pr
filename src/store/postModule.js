@@ -1,101 +1,82 @@
-import axios from 'axios';
+import axios from "axios";
 export const postModule = {
   state: () => ({
-    posts: [],
-    isPostsLoading: false,
-    selectedSort: '',
-    searchQuery: '',
-    page: 1,
-    totalPages: 0,
-    limit: 10,
-    URL: 'https://jsonplaceholder.typicode.com/posts',
-    sortOptions: [
-      { value: 'title', name: 'По названию' },
-      { value: 'body', name: 'По содержимому' },
-    ],
+    posts: localStorage.getItem("posts") || "",
+    isPostsLoading: true,
+    token: localStorage.getItem("token") || "",
   }),
-  getters: {
-    sortedPosts(state) {
-      return [...state.posts].sort((post1, post2) =>
-        post1[state.selectedSort]?.localeCompare(
-          post2[state.selectedSort],
-        ),
-      );
+  actions: {
+    async fetchPosts({ state, commit }) {
+      try {
+        commit("setLoading", true);
+        const { data } = await axios.get(`http://localhost:8000/posts`, {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        });
+        commit("setPosts", data);
+      } catch (error) {
+        console.log("Error", error);
+      } finally {
+        commit("setLoading", false);
+      }
     },
-    sortedAndSearchedPosts(state, getters) {
-      return getters.sortedPosts.filter((post) =>
-        post.title
-          ?.toLowerCase()
-          .includes(state.searchQuery.toLowerCase()),
-      );
+    async fetchCreatePost({ commit, dispatch, state }, post) {
+      try {
+        commit("setLoading", true);
+
+        const { data, headers } = await axios.post(
+          `http://localhost:8000/posts/create`,
+          {
+            title: post.title,
+            content: post.body,
+            author: "652e299f4cd09cef792c3cf3",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${state.token}`, // Передача токена через заголовок
+            },
+          },
+        );
+        await commit("setPosts", data);
+      } catch (error) {
+        console.log("Error", error);
+      } finally {
+        await dispatch("fetchPosts");
+        commit("setLoading", false);
+      }
+    },
+    async deletePost({ commit }, id) {
+      console.log(id);
+      commit("deletePost", id);
     },
   },
   mutations: {
     setPosts(state, posts) {
       state.posts = posts;
+      localStorage.setItem("posts", JSON.stringify(posts));
     },
+    addPost(state, post) {
+      state.posts.push(post);
+    },
+    deletePost(state, id) {
+      state.posts = state.posts.filter((post) => {
+        return post.id !== id;
+      });
+    },
+    addComment(state, comment, id) {
+      state.posts[id].comments.push(comment);
+    },
+    // deleteComment(state, id) {
+    //   state.posts = state.posts.filter((post) => {
+    //     return post.id !== id;
+    //   });
+    // },
     setLoading(state, bool) {
+      console.log(bool);
       state.isPostsLoading = bool;
     },
-    setSelectedSort(state, selectedSort) {
-      state.selectedSort = selectedSort;
-    },
-    setPage(state, page) {
-      state.page = page;
-    },
-    setTotalPages(state, totalPages) {
-      state.totalPages = totalPages;
-    },
-    setSearchQuery(state, searchQuery) {
-      state.searchQuery = searchQuery;
-    },
   },
-  actions: {
-    async fetchPosts({ state, commit }) {
-      try {
-        commit('setLoading', true);
-        const { data, headers } = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts',
-          {
-            params: {
-              _page: state.page,
-              _limit: state.limit,
-            },
-          },
-        );
-        commit(
-          'setTotalPages',
-          Math.ceil(headers['x-total-count'] / state.limit),
-        );
-        commit('setPosts', data);
-      } catch (error) {
-        console.log('Ошибка', error);
-      } finally {
-        commit('setLoading', false);
-      }
-    },
 
-    async fetchMorePosts({ state, commit }) {
-      try {
-        commit('setPage', state.page + 1);
-        const { data, headers } = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts',
-          {
-            params: {
-              _page: state.page,
-              _limit: state.limit,
-            },
-          },
-        );
-        commit(
-          'setTotalPages',
-          Math.ceil(headers['x-total-count'] / state.limit),
-        );
-        commit('setPosts', [...state.posts, ...data]);
-      } catch (error) {
-        alert('Ошибка', error);
-      }
-    },
-  },
   namespaced: true,
 };

@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'my-select',
+  name: "my-select",
   props: {
     modelValue: {
       type: String,
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     changeOption(event) {
-      this.$emit('update:modelValue', event.target.value);
+      this.$emit("update:modelValue", event.target.value);
     },
   },
 };

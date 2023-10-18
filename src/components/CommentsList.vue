@@ -1,29 +1,27 @@
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import PostItem from "./PostItem.vue";
+import CommentItem from "./CommentItem.vue";
+
 const store = useStore();
-// const posts = ref(store.state.post.posts);
-// onBeforeMount();
-const filteredPosts = computed(() => {
-  return JSON.parse(localStorage.getItem("posts"));
+
+const filteredComments = computed(() => {
+  return store.state.comment.comments;
 });
-console.log(filteredPosts.value);
+console.log(filteredComments.value);
 </script>
 
 <template>
-  <div v-if="filteredPosts.length > 0">
-    <h3>Список постов</h3>
+  <div v-if="filteredComments.length > 0">
     <transition-group name="post-list">
-      <PostItem
-        v-if="filteredPosts.length > 0"
-        v-for="post in filteredPosts"
-        :key="post.id"
-        :post="post"
+      <CommentItem
+        v-if="filteredComments.length > 0"
+        v-for="comment in filteredComments"
+        :key="comment._id"
+        :comment="comment"
       />
     </transition-group>
   </div>
-  <h2 v-else style="color: red">Список постов пуст</h2>
 </template>
 
 <style scoped>

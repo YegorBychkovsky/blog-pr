@@ -2,11 +2,6 @@
   <div>About</div>
 </template>
 
-<script>
-export default {
-  data() {},
-  methods: {},
-};
-</script>
+<script setup></script>
 
-<style></style>
+<style scoped></style>

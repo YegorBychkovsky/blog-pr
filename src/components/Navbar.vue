@@ -1,29 +1,32 @@
 <template>
   <div class="navbar">
-    <div @click="$router.push('/')">Vue 3</div>
+    <div @click="$router.push('/')">Posts Application</div>
     <div class="navbar__btns">
-      <my-button @click="$router.push('/posts')">Posts</my-button>
-      <my-button @click="$router.push('/about')" style="margin-left: 20px">
-        About this project
-      </my-button>
-      <my-button @click="$router.push('/store')" style="margin-left: 20px">
-        store
-      </my-button>
       <my-button
-        @click="$router.push('/composition')"
+        v-if="store.state.post.token"
+        @click="$router.push('/posts')"
+        >Posts</my-button
+      >
+      <my-button
+        v-else
+        @click="$router.push('/login')"
+        style="margin-left: 20px"
+        >Login</my-button
+      >
+      <my-button
+        v-if="store.state.post.token"
+        @click="$router.push('/profile')"
         style="margin-left: 20px"
       >
-        composition
+        Profile
       </my-button>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {},
-  methods: {},
-};
+<script setup>
+import { useStore } from "vuex";
+const store = useStore();
 </script>
 
 <style scoped>
