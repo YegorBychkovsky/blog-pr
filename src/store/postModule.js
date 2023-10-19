@@ -47,7 +47,6 @@ export const postModule = {
       }
     },
     async deletePost({ commit }, id) {
-      console.log(id);
       commit("deletePost", id);
     },
   },
@@ -73,7 +72,6 @@ export const postModule = {
     //   });
     // },
     setLoading(state, bool) {
-      console.log(bool);
       state.isPostsLoading = bool;
     },
   },

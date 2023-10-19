@@ -35,9 +35,7 @@ const login = async () => {
     password: password.value,
   });
   const token = localStorage.getItem("token");
-  console.log(token);
   if (token) {
-    console.log(token);
     route.push({ path: "/posts" });
   }
 };

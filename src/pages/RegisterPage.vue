@@ -47,18 +47,13 @@ const password = ref("");
 const confirmPassword = ref("");
 
 const register = async () => {
-  console.log(email.value);
-  console.log(fullName.value);
-  console.log(password.value);
   await store.dispatch("user/fetchRegister", {
     email: email.value,
     fullName: fullName.value,
     password: password.value,
   });
   const token = localStorage.getItem("token");
-  console.log(token);
   if (token) {
-    console.log(token);
     route.push({ path: "/posts" });
   }
 };

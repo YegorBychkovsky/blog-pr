@@ -7,7 +7,6 @@ export const commentModule = {
   }),
   actions: {
     async fetchCommentsForComment({ commit, state }, commentId) {
-      console.log("DONE!");
       try {
         const { data } = await axios.get(
           `http://localhost:8000/commentsForComment/${commentId}`,
@@ -17,14 +16,12 @@ export const commentModule = {
             },
           },
         );
-        console.log(data);
         commit("setComments", data);
       } catch (error) {
         console.log("Error fetching comments", error);
       }
     },
     async fetchComments({ commit, state }, postId) {
-      console.log("DONE!");
       try {
         const { data } = await axios.get(
           `http://localhost:8000/comments/${postId}`,
@@ -40,7 +37,6 @@ export const commentModule = {
       }
     },
     async replyToComment({ commit, state }, comment) {
-      console.log(comment);
       try {
         const { data } = await axios.post(
           `http://localhost:8000/comment/reply`,

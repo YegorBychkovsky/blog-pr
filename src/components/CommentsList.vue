@@ -8,7 +8,6 @@ const store = useStore();
 const filteredComments = computed(() => {
   return store.state.comment.comments;
 });
-console.log(filteredComments.value);
 </script>
 
 <template>

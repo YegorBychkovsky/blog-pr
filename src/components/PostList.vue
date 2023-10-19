@@ -4,15 +4,13 @@ import { useStore } from "vuex";
 import PostItem from "./PostItem.vue";
 const store = useStore();
 // const posts = ref(store.state.post.posts);
-// onBeforeMount();
 const filteredPosts = computed(() => {
-  return JSON.parse(localStorage.getItem("posts"));
+  return store.state.post.posts;
 });
-console.log(filteredPosts.value);
 </script>
 
 <template>
-  <div v-if="filteredPosts.length > 0">
+  <div v-if="filteredPosts?.length > 0">
     <h3>Список постов</h3>
     <transition-group name="post-list">
       <PostItem

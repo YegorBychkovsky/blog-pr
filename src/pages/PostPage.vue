@@ -34,9 +34,7 @@ const showDialogWindow = () => {
 };
 
 onBeforeMount(async () => {
-  console.log(isPostsLoading.value);
   await store.dispatch("post/fetchPosts");
-  console.log(isPostsLoading.value);
 });
 </script>
 

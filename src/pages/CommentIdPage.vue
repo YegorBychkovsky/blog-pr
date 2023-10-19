@@ -23,7 +23,6 @@ const commentContent = computed(() => {
   comments.find((comment) => comment._id === route.params.id)?.content;
 });
 onMounted(() => {
-  console.log("fetch");
   store.dispatch("fetchCommentsForComment", route.params.id);
 });
 </script>
