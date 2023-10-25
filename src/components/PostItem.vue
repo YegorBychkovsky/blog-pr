@@ -40,7 +40,7 @@ const props = defineProps({
     required: true,
   },
 });
-
+console.log(props.post);
 const openPost = () => {
   route.push(`/posts/${props.post._id}`);
 };

@@ -1,17 +1,18 @@
 import axios from "axios";
 export const postModule = {
   state: () => ({
-    posts: localStorage.getItem("posts") || "",
-    isPostsLoading: true,
+    posts: JSON.parse(localStorage.getItem("posts")) || "",
+    isPostsLoading: false,
     token: localStorage.getItem("token") || "",
   }),
   actions: {
     async fetchPosts({ state, commit }) {
       try {
         commit("setLoading", true);
+        const token = localStorage.getItem("token");
         const { data } = await axios.get(`http://localhost:8000/posts`, {
           headers: {
-            Authorization: `Bearer ${state.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         commit("setPosts", data);

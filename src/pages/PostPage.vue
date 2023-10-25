@@ -16,7 +16,7 @@
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import MyDialog from "@/components/ui/MyDialog.vue";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
@@ -33,7 +33,7 @@ const showDialogWindow = () => {
   dialogVisible.value = true;
 };
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await store.dispatch("post/fetchPosts");
 });
 </script>
